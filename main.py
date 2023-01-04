@@ -10,39 +10,51 @@ FONT_NAME = "Courier"
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
-
+reps = 0
 # ---------------------------- TIMER RESET ------------------------------- # 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 
+
+def start_timer():
+    global btn_start
+    global reps
+    reps += 1
+
+    btn_start["state"] = "disabled"
+    time_to_work = 1 * 60
+    short_break = 0.3 * 60
+    long_break = 0.4 * 60
+
+    if reps % 2 == 0:
+        if reps == 8:
+            count_down(long_break)
+        else:
+            count_down(short_break)
+    else:
+        count_down(time_to_work)
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 
 
-def start_timer():
-    time_to_show = 0.5 * 60
-    count_down(time_to_show)
-
-
-# ---------------------------- UI SETUP ------------------------------- #
-
-window = Tk()
-window.title("Pomodoro")
-window.config(padx=100, pady=50, bg=YELLOW)
-
-
 def count_down(count):
+    global btn_start
     count_minute = math.floor(count / 60)
     count_seconds = math.floor(count % 60)
-    if count_seconds == 0:
-        count_seconds = "00"
 
-    if count <= 9:
-        count_seconds = "0" + str(count_seconds)
+    if int(count_seconds) <= 9:
+        count_seconds = f"0{count_seconds}"
 
     canvas.itemconfig(timer_text, text=f"{count_minute}:{count_seconds}")
     if count > 0:
         window.after(1000, count_down, count - 1)
+    else:
+        btn_start["state"] = "normal"
 
+
+# ---------------------------- UI SETUP ------------------------------- #
+window = Tk()
+window.title("Pomodoro")
+window.config(padx=100, pady=50, bg=YELLOW)
 
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 photo_image = PhotoImage(file="tomato.png")
