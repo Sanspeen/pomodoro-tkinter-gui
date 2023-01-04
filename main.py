@@ -17,7 +17,6 @@ reps = 0
 
 
 def start_timer():
-    global btn_start
     global reps
     reps += 1
 
@@ -29,10 +28,14 @@ def start_timer():
     if reps % 2 == 0:
         if reps == 8:
             count_down(long_break)
+            lbl_timer.config(text="Long break", fg=RED)
         else:
             count_down(short_break)
+            lbl_timer.config(text="Short break", fg=PINK)
     else:
         count_down(time_to_work)
+        lbl_timer.config(text="Working", fg=GREEN)
+
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 
 
@@ -48,7 +51,7 @@ def count_down(count):
     if count > 0:
         window.after(1000, count_down, count - 1)
     else:
-        btn_start["state"] = "normal"
+        start_timer()
 
 
 # ---------------------------- UI SETUP ------------------------------- #
